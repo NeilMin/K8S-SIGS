@@ -1,0 +1,11 @@
+{
+  "type": "hive",
+  "configProps": {
+    "hive.metastore.uris": "thrift://prod-hive-metastore:9083",
+    "fs.default.name": "hdfs://prod-hdfs-namenode:8020",
+    "hive.metastore.sasl.enabled": "false",
+    "hive.metastore.schema.verification": "false",
+    "datanucleus.schema.autoCreateAll": "true"
+  },
+  "enabled": true
+}

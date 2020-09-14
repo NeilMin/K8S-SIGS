@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: yarn-config-node
+  namespace: sigs
+data:
+  CORE-SITE.XML_fs.defaultFS: 'hdfs://prod-hdfs-namenode.sigs.svc:8020'
+  CORE-SITE.XML_hadoop.proxyuser.root.hosts: '*'
+  CORE-SITE.XML_hadoop.proxyuser.root.groups: '*'
+  MAPRED-SITE.XML_mapreduce.framework.name: "yarn"
+  MAPRED-SITE.XML_yarn.app.mapreduce.am.env: "HADOOP_MAPRED_HOME=/opt/hadoop/etc/hadoop:/opt/hadoop/share/hadoop/common/lib/*:/opt/hadoop/share/hadoop/common/*:/opt/hadoop/share/hadoop/hdfs:/opt/hadoop/share/hadoop/hdfs/lib/*:/opt/hadoop/share/hadoop/hdfs/*:/opt/hadoop/share/hadoop/mapreduce/lib/*:/opt/hadoop/share/hadoop/mapreduce/*:/opt/hadoop/share/hadoop/yarn:/opt/hadoop/share/hadoop/yarn/lib/*:/opt/hadoop/share/hadoop/yarn/*"
+  MAPRED-SITE.XML_mapreduce.map.env: "HADOOP_MAPRED_HOME=/opt/hadoop/etc/hadoop:/opt/hadoop/share/hadoop/common/lib/*:/opt/hadoop/share/hadoop/common/*:/opt/hadoop/share/hadoop/hdfs:/opt/hadoop/share/hadoop/hdfs/lib/*:/opt/hadoop/share/hadoop/hdfs/*:/opt/hadoop/share/hadoop/mapreduce/lib/*:/opt/hadoop/share/hadoop/mapreduce/*:/opt/hadoop/share/hadoop/yarn:/opt/hadoop/share/hadoop/yarn/lib/*:/opt/hadoop/share/hadoop/yarn/*"
+  MAPRED-SITE.XML_mapreduce.reduce.env: "HADOOP_MAPRED_HOME=/opt/hadoop/etc/hadoop:/opt/hadoop/share/hadoop/common/lib/*:/opt/hadoop/share/hadoop/common/*:/opt/hadoop/share/hadoop/hdfs:/opt/hadoop/share/hadoop/hdfs/lib/*:/opt/hadoop/share/hadoop/hdfs/*:/opt/hadoop/share/hadoop/mapreduce/lib/*:/opt/hadoop/share/hadoop/mapreduce/*:/opt/hadoop/share/hadoop/yarn:/opt/hadoop/share/hadoop/yarn/lib/*:/opt/hadoop/share/hadoop/yarn/*"
+  MAPRED-SITE.XML_mapreduce.jobhistory.address: "prod-yarn-resourcemanager.sigs.svc:10020"
+  MAPRED-SITE.XML_mapreduce.jobhistory.webapp.address: "prod-yarn-resourcemanager.sigs.svc:19888"
+  MAPRED-SITE.XML_mapreduce.jobhistory.done-dir: "${yarn.app.mapreduce.am.staging-dir}/history/done"
+  MAPRED-SITE.XML_mapreduce.jobhistory.intermediate-done-dir: "${yarn.app.mapreduce.am.staging-dir}/history/done_intermediate"
+  YARN-SITE.XML_yarn.webapp.ui2.enable: "true"
+  YARN-SITE.XML_yarn.nodemanager.vmem-check-enabled: "false"
+  YARN-SITE.XML_yarn.nodemanager.bind-host: "0.0.0.0"
+  YARN-SITE.XML_yarn.resourcemanager.hostname: "prod-yarn-resourcemanager.sigs.svc"
+  YARN-SITE.XML_yarn.nodemanager.pmem-check-enabled: "false"
+  YARN-SITE.XML_yarn.nodemanager.aux-services: "mapreduce_shuffle"
+  YARN-SITE.XML_yarn.resourcemanager.address: "prod-yarn-resourcemanager.sigs.svc:8032"
+  YARN-SITE.XML_yarn.resourcemanager.scheduler.address: "prod-yarn-resourcemanager.sigs.svc:8030"
+  YARN-SITE.XML_yarn.app.mapreduce.am.resource.mb: "200"
+  YARN-SITE.XML_yarn.app.mapreduce.am.resource.cpu-vcores: "1"
+  YARN-SITE.XML_yarn.scheduler.maximum-allocation-mb: "4096"
+  YARN-SITE.XML_yarn.scheduler.maximum-allocation-vcores: "2"
+  YARN-SITE.XML_yarn.scheduler.capacity.maximum-am-resource-percent: "0.8"
+  YARN-SITE.XML_yarn.log-aggregation-enable: "true"

@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prod-yarn-nodemanager
+  namespace: sigs
+spec:
+  clusterIP: None
+  ports:
+  - port: 8042
+    name: web
+  selector:
+     app: yarn
+     component: nodemanager
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: prod-yarn-nodemanager
+  namespace: sigs
+  labels:
+    app: yarn
+    component: nodemanager
+spec:
+  serviceName: prod-yarn-nodemanager
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  selector:
+     matchLabels:
+        app: yarn
+        component: nodemanager
+  template:
+    metadata:
+      labels:
+        app: yarn
+        component: nodemanager
+    spec:
+      containers:
+        - name: prod-yarn-nodemanager
+          imagePullPolicy: 'Always'
+          image: applysq/yarn:1.0.0_node_hadoop_3.2.1_v2
+          resources:
+            requests:
+              cpu: 200m
+              memory: 200M
+          ports:
+            - containerPort: 8042
+              name: web
+              protocol: TCP  
+          args: ["/entrypoint.sh; yarn nodemanager"]
+          env:
+              - name: WAITFOR
+                value: "prod-yarn-resourcemanager-0.prod-yarn-resourcemanager:8031"
+              - name: HIVE_CONF_hive_metastore_uris
+                value: "thrift://prod-hive-metastore:9083"
+              - name: HIVE_CONF_hive_support_concurrency
+                value: "true"
+              - name: HIVE_CONF_hive_compactor_initiator_on
+                value: "true"
+              - name: HIVE_CONF_hive_compactor_worker_threads
+                value: "1"
+              - name: HIVE_CONF_hive_txn_manager
+                value: "org.apache.hadoop.hive.ql.lockmgr.DbTxnManager"
+              - name: HIVE_CONF_hive_enforce_bucketing
+                value: "true"
+              - name: HIVE_CONF_hive_exec_dynamic_partition_mode
+                value: "nonstrict"
+          envFrom:
+             - configMapRef:
+                  name: yarn-config-node
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          emptyDir: {}
